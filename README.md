@@ -70,6 +70,10 @@ Clone repo with submodules:
 ```
 git clone https://github.com/ToniRV/NeRF-SLAM.git --recurse-submodules
 git submodule update --init --recursive
+cd thirdparty/instant-ngp
+git checkout feature/nerf_slam
+cd ../gtsam
+git checkout feature/nerf_slam
 ```
 
 From this point on, use a virtual environment...
@@ -87,6 +91,7 @@ pip install -r ./thirdparty/gtsam/python/requirements.txt
 
 Compile ngp (you need cmake>3.22):
 ```
+sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 cmake ./thirdparty/instant-ngp -B build_ngp
 cmake --build build_ngp --config RelWithDebInfo -j
 ```
@@ -97,6 +102,11 @@ cmake ./thirdparty/gtsam -DGTSAM_BUILD_PYTHON=1 -B build_gtsam
 cmake --build build_gtsam --config RelWithDebInfo -j
 cd build_gtsam
 make python-install
+```
+
+`build_gtsam/python/linear.cpp` #400
+```
+.def(py::init<const gtsam::KeyVector&, const std::vector<gtsam::Matrix>&, const std::vector<gtsam::Vector>&, double>(), py::arg("js"), py::arg("Gs"), py::arg("gs"), py::arg("f"))
 ```
 
 Install:
